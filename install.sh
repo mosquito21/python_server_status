@@ -67,7 +67,7 @@ After=network.target
 User=$(whoami)
 Group=$(whoami)
 WorkingDirectory=$APP_DIR
-ExecStart=$(command -v gunicorn) -w 4 -b 0.0.0.0:5000 app:app
+ExecStart=$(command -v gunicorn) -w 4 -b 0.0.0.0:5172 app:app
 Restart=always
 
 [Install]
@@ -84,4 +84,4 @@ sudo systemctl start $SERVICE_NAME
 echo "Estado del servicio:"
 sudo systemctl status $SERVICE_NAME
 
-echo "Instalación completada. API corriendo en el puerto 5000."
+echo "Instalación completada. API corriendo en el puerto 5172."
