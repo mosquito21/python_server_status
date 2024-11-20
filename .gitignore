@@ -1,0 +1,44 @@
+# Ignorar entornos virtuales
+venv/
+.env/
+
+# Archivos de configuración locales y secretos
+*.env
+*.key
+*.pem
+
+# Archivos y carpetas de compilación
+__pycache__/
+*.py[cod]
+*.so
+
+# Archivos de caché del sistema
+*.DS_Store
+*.log
+*.sqlite3
+*.db
+
+# Archivos de paquetes de distribución
+dist/
+build/
+*.egg-info/
+
+# Configuraciones específicas de IDEs o editores
+.vscode/
+.idea/
+*.swp
+*.sublime-project
+*.sublime-workspace
+
+# Archivos generados por herramientas de documentación
+docs/_build/
+
+# Archivos creados por pytest o herramientas de testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Ignorar configuraciones y carpetas específicas del sistema operativo
+Thumbs.db
