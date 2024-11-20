@@ -1,5 +1,3 @@
 linux_metrics
 flask
-json
-os
 pyhton-dotenv

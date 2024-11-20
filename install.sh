@@ -3,7 +3,6 @@
 # Variables dinámicas
 APP_DIR=$(pwd)  # Obtiene la ruta actual del script
 SERVICE_NAME="python_server_status.service"
-VENV_DIR="$APP_DIR/venv"
 
 # Función para verificar comandos
 function check_command {
@@ -13,38 +12,9 @@ function check_command {
     fi
 }
 
-# Verificar Python 3.7+
-PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
-if [[ $(echo "$PYTHON_VERSION >= 3.7" | bc -l) -eq 0 ]]; then
-    echo "Error: Se requiere Python 3.7 o superior. Encontrado: $PYTHON_VERSION"
-    exit 1
-else
-    echo "Python 3.7+ encontrado: $PYTHON_VERSION"
-fi
+#verifico que exista pip
+check_command "pip"
 
-# Verificar pip
-check_command "pip3"
-
-# Verificar virtualenv
-if ! python3 -m venv --help &> /dev/null; then
-    echo "Error: virtualenv no está disponible. Por favor, instala virtualenv:"
-    echo "  pip3 install virtualenv"
-    exit 1
-else
-    echo "virtualenv está disponible."
-fi
-
-# Crear el entorno virtual si no existe
-if [ ! -d "$VENV_DIR" ]; then
-    echo "Creando entorno virtual en $VENV_DIR..."
-    python3 -m venv $VENV_DIR
-else
-    echo "Entorno virtual ya existe en $VENV_DIR."
-fi
-
-# Activar el entorno virtual
-echo "Activando entorno virtual..."
-source $VENV_DIR/bin/activate
 
 # Instalar dependencias
 echo "Instalando dependencias..."
@@ -64,7 +34,7 @@ After=network.target
 User=$(whoami)
 Group=$(whoami)
 WorkingDirectory=$APP_DIR
-ExecStart=$VENV_DIR/bin/gunicorn -w 4 -b 0.0.0.0:5000 app:app
+ExecStart=/bin/gunicorn -w 4 -b 0.0.0.0:5000 app:app
 Restart=always
 
 [Install]
