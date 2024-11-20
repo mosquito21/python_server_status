@@ -1,3 +1,4 @@
 linux_metrics
 flask
 python-dotenv
+requests
