@@ -13,7 +13,20 @@ function check_command {
 }
 
 #verifico que exista pip
-check_command "pip"
+PIP=check_command "pip"
+
+if [ -z "$PIP" ]; then
+    echo "Instalando pip..."
+    sudo apt-get install python3-pip
+fi
+
+#instalo gunicorn
+GUNICORN=check_command "gunicorn"
+
+if [ -z "$GUNICORN" ]; then
+    echo "Instalando gunicorn..."
+    pip install gunicorn
+fi
 
 
 # Instalar dependencias
