@@ -47,7 +47,7 @@ After=network.target
 User=$(whoami)
 Group=$(whoami)
 WorkingDirectory=$APP_DIR
-ExecStart=/bin/gunicorn -w 4 -b 0.0.0.0:5000 app:app
+ExecStart=gunicorn -w 4 -b 0.0.0.0:5000 app:app
 Restart=always
 
 [Install]
