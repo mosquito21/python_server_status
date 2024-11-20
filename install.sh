@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables dinámicas
-APP_DIR=$(pwd)  # Obtiene la ruta actual del script
+APP_DIR=$(pwd) 
 SERVICE_NAME="python_server_status.service"
 
 # Función para verificar comandos
