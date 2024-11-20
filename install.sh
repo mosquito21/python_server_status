@@ -12,28 +12,48 @@ function check_command {
     fi
 }
 
-#verifico que exista pip
-PIP=check_command "pip"
-
-if [ -z "$PIP" ]; then
-    echo "Instalando pip..."
-    sudo apt-get install python3-pip
+# Verificar Python 3.7+
+PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
+if [[ $(echo "$PYTHON_VERSION >= 3.7" | bc -l) -eq 0 ]]; then
+    echo "Advertencia: Python 3.7 o superior es recomendado. Encontrado: $PYTHON_VERSION"
+else
+    echo "Python 3.7+ encontrado: $PYTHON_VERSION"
 fi
 
-#instalo gunicorn
-GUNICORN=check_command "gunicorn"
+# Verificar pip o pip3
+if command -v pip3 &> /dev/null; then
+    PIP="pip3"
+    echo "Usando pip3."
+elif command -v pip &> /dev/null; then
+    PIP="pip"
+    echo "Usando pip."
+else
+    echo "Error: pip o pip3 no están instalados. Instalando pip3..."
+    sudo apt-get update
+    sudo apt-get install -y python3-pip
+    PIP="pip3"
+fi
 
-if [ -z "$GUNICORN" ]; then
+# Verificar gunicorn
+if ! command -v gunicorn &> /dev/null; then
     echo "Instalando gunicorn..."
-    pip install gunicorn
+    $PIP install gunicorn
+    if ! command -v gunicorn &> /dev/null; then
+        echo "Error: gunicorn no está en el PATH después de la instalación. Verifica tu entorno."
+        exit 1
+    fi
+else
+    echo "gunicorn ya está instalado."
 fi
 
-
-# Instalar dependencias
+# Instalar dependencias del proyecto
 echo "Instalando dependencias..."
-pip install --upgrade pip
-pip install -r $APP_DIR/requirements.txt
-pip install gunicorn
+$PIP install --upgrade pip
+if [ -f "$APP_DIR/requirements.txt" ]; then
+    $PIP install -r "$APP_DIR/requirements.txt"
+else
+    echo "Advertencia: Archivo requirements.txt no encontrado. Asegúrate de que las dependencias estén instaladas manualmente."
+fi
 
 # Crear archivo systemd para el servicio
 echo "Creando archivo systemd para el servicio..."
@@ -47,7 +67,7 @@ After=network.target
 User=$(whoami)
 Group=$(whoami)
 WorkingDirectory=$APP_DIR
-ExecStart=gunicorn -w 4 -b 0.0.0.0:5000 app:app
+ExecStart=$(command -v gunicorn) -w 4 -b 0.0.0.0:5000 app:app
 Restart=always
 
 [Install]
