@@ -39,11 +39,7 @@ def server_status():
     disk_total,disk_used,disk_free =functions.disk_usage()    
     cpu_usage = functions.cpu_usage()
     memory_total,memory_used = functions.ram_usage()
-    try:
-        mysql_status,mysql_since_time,apache_status,apache_since_time = functions.services_status()
-    except:
-        mysql_status,mysql_since_time,apache_status,apache_since_time = "Service not present","Service not present","Service not present","Service not present"
-    
+    mysql_status,mysql_since_time,apache_status,apache_since_time = functions.services_status()
     load_avg = (functions.load_avg()[0])
     
     memory_percent = round ((memory_used/memory_total)*100,2)

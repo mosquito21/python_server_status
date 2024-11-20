@@ -4,6 +4,8 @@ import os
 import json
 import datetime, time
 
+    
+
 
 def isActive(daemon):
     command = "systemctl is-active " + daemon + " > tmp"
@@ -30,14 +32,18 @@ def since_time(daemon):
     else:
         command = "systemctl show --property=InactiveEnterTimestamp " + daemon +" | cut -d '=' -f 2 "+"| cut -d ' ' -f 2,3"" > tmp"
         os.system(command)
-        with open('tmp') as tmp:
-            tmp = tmp.read()
-            #quitamos el salto de linea
-            tmp = tmp.rstrip()
-            tmp = datetime.datetime.strptime(tmp, "%Y-%m-%d %H:%M:%S")
-            tmp = datetime.datetime.now() - tmp 
-            tmp = str(tmp).split('.')[0] 
-            return tmp
+        #verifico si el archivo contiene algo
+        if os.stat("tmp").st_size <= 2:
+            return "No data"
+        else:        
+            with open('tmp') as tmp:
+                tmp = tmp.read()
+                #quitamos el salto de linea
+                tmp = tmp.rstrip()
+                tmp = datetime.datetime.strptime(tmp, "%Y-%m-%d %H:%M:%S")
+                tmp = datetime.datetime.now() - tmp 
+                tmp = str(tmp).split('.')[0] 
+                return tmp
 
 class Functions:
 
@@ -72,6 +78,7 @@ class Functions:
 
 
     def services_status(self):
+      
         mysql_status= isActive('mysql')
         mysql_since_time = since_time('mysql')
 
