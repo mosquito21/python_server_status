@@ -39,11 +39,14 @@ def since_time(daemon):
             with open('tmp') as tmp:
                 tmp = tmp.read()
                 #quitamos el salto de linea
-                tmp = tmp.rstrip()
-                tmp = datetime.datetime.strptime(tmp, "%Y-%m-%d %H:%M:%S")
-                tmp = datetime.datetime.now() - tmp 
-                tmp = str(tmp).split('.')[0] 
-                return tmp
+                try:
+                    tmp = datetime.datetime.strptime(tmp, "%Y-%m-%d %H:%M:%S")
+                    tmp = tmp.rstrip()
+                    tmp = datetime.datetime.now() - tmp 
+                    tmp = str(tmp).split('.')[0] 
+                    return tmp
+                except:
+                    return "No data"
 
 class Functions:
 
