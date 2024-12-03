@@ -12,7 +12,9 @@ def isActive(daemon):
     os.system(command)
     with open('tmp') as tmp:
         tmp = tmp.read()
-        if tmp.startswith ("active") in tmp:
+        print("status: ",tmp)
+        print("len: ",len(tmp))
+        if "active" in tmp and len(tmp) == 7:
             # os.remove('tmp')
             return 1
     return 0
