@@ -12,7 +12,7 @@ def isActive(daemon):
     os.system(command)
     with open('tmp') as tmp:
         tmp = tmp.read()
-        if "inactive" in tmp:
+        if not "active" in tmp:
             os.remove('tmp')
             return 0
     return 1
