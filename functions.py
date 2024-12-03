@@ -12,10 +12,10 @@ def isActive(daemon):
     os.system(command)
     with open('tmp') as tmp:
         tmp = tmp.read()
-        if not "active" in tmp:
-            os.remove('tmp')
-            return 0
-    return 1
+        if tmp.startswith ("active") in tmp:
+            # os.remove('tmp')
+            return 1
+    return 0
 
 def since_time(daemon):
     if isActive(daemon) == 1:
